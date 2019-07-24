@@ -1,7 +1,20 @@
-<h2>{{hero.name}} Details</h2>
-<div><span>id: </span>{{hero.id}}</div>
-<div>
-    <label>name:
-      <input [(ngModel)]="hero.name" placeholder="name"/>
-    </label>
+<h2>My Heroes</h2>
+<ul class="heroes">
+  <!--圆括号：事件绑定，监听事件click，当click时执行表达式 onSelect(hero)
+      参数就是 *ngFor 里面遍历的每一个 hero-->
+  <li *ngFor="let hero of heroes" 
+      [class.selected]="hero === selectedHero"
+      (click)="onSelect(hero)"> 
+    <span class="badge">{{hero.id}}</span> {{hero.name}}
+  </li>
+</ul>
+
+<div *ngIf="selectedHero"> <!--使用 *ngIf 隐藏空白的详情，再用一个div括起来-->
+    <h2>{{selectedHero.name}} Details</h2>
+    <div><span>id: </span>{{selectedHero.id}}</div>
+    <div>
+        <label>name:
+        <input [(ngModel)]="selectedHero.name" placeholder="name"/>
+        </label>
+    </div>
 </div>
