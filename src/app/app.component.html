@@ -1,3 +1,13 @@
 <h1>{{title}}</h1>
-<app-heroes></app-heroes>
+
+<nav>
+  <a routerLink="/heroes">Heroes</a>
+</nav>
+
+<!--把 <app-heroes> 元素替换为 <router-outlet> 元素。
+    之所以移除 <app-heroes>，是因为只有当用户导航到这里时，才需要显示 HeroesComponent。
+    一开始 URL 是以 / 结尾的。 而到 HeroesComponent 的路由路径是 /heroes。
+    在地址栏中把 /heroes 追加到 URL 后面，就可以正常显示-->
+
+<router-outlet></router-outlet>
 <app-messages></app-messages>
