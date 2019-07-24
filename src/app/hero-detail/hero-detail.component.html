@@ -1,0 +1,15 @@
+<div *ngIf="hero"> <!--使用 *ngIf 隐藏空白的详情，再用一个div括起来-->
+    <h2>{{hero.name}} Details</h2>
+    <div><span>id: </span>{{hero.id}}</div>
+    <div>
+        <label>name:
+        <input [(ngModel)]="hero.name" placeholder="name"/>
+        <!--
+            [(ngModel)] 是 Angular 的双向数据绑定语法。属于一个可选模块 FormsModule
+
+            这里把 hero.name 属性绑定到了 HTML 的 textbox 元素上，以便数据流可以双向流动：
+            从 hero.name 属性流动到 textbox，并且从 textbox 流回到 hero.name 。
+        -->
+        </label>
+    </div>
+</div>
