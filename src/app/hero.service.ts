@@ -15,6 +15,10 @@ import { HEROES } from './mock-heroes';
 import { Observable, of } from 'rxjs'; 
 import { MessageService } from './message.service';
 
+import { HttpClient, HttpHeaders } from '@angular/common/http'; // 所需的 HTTP 符号
+
+import { catchError, map, tap } from 'rxjs/operators'; //捕获错误，你就要使用 RxJS 的 catchError() 操作符来建立对 Observable 结果的处理管道（pipe）
+
 /* @Injectable() 装饰器。 
 它把这个类标记为依赖注入系统的参与者之一 */
 @Injectable({
@@ -25,23 +29,72 @@ import { MessageService } from './message.service';
 export class HeroService {
 
   constructor(
-    private messageService: MessageService
+    private messageService: MessageService,
     // 典型的“服务中的服务”场景： 你把 MessageService 注入到了 HeroService 中，而 HeroService 又被注入到了 HeroesComponent 中。
+    private http: HttpClient, // 把 HttpClient 注入到构造函数中一个名叫 http 的私有属性中。
   ) { }
 
   // getHeroes 方法，让它返回模拟的英雄列表。
   // getHeroes(): Hero[] { 不要用这个同步的，断定肯定能获取数据的操作
 
   // of(HEROES) 会返回一个 Observable<Hero[]>，它会发出单个值，这个值就是这些模拟英雄的数组。
-  getHeroes(): Observable<Hero[]> {
+  /*getHeroes(): Observable<Hero[]> {
     this.messageService.add('HeroService: fetched heroes');
     return of(HEROES);
-  }
+  }*/
 
-  getHero(id: number): Observable<Hero> {
+  
+  /*getHero(id: number): Observable<Hero> {
     // TODO: send the message _after_ fetching the hero
     this.messageService.add(`HeroService: fetched hero id=${id}`); // 反引号 ( ` ) 用于定义 JavaScript 的 模板字符串字面量，以便嵌入 id。
     return of(HEROES.find(hero => hero.id === id));
-  }
+  }*/
+
+    /** Log a HeroService message with the MessageService */
+    private log(message: string) {
+      this.messageService.add(`HeroService: ${message}`);
+    }
   
+    private heroesUrl = 'api/heroes';  // URL to web api
+  
+    /** GET heroes from the server */
+    // HeroService.getHeroes() 方法应该捕获错误，并做适当的处理。
+    getHeroes (): Observable<Hero[]> {
+      return this.http.get<Hero[]>(this.heroesUrl)
+        .pipe(
+          tap(_ => this.log('fetched heroes')),
+          catchError(this.handleError<Hero[]>('getHeroes', []))
+        );
+    }
+
+    /** GET hero by id. Will 404 if id not found */
+    getHero(id: number): Observable<Hero> {
+      const url = `${this.heroesUrl}/${id}`; //它使用想获取的英雄的 id 构建了一个请求 URL。
+      return this.http.get<Hero>(url) //服务器应该使用单个英雄作为回应，而不是一个英雄数组。
+        .pipe(
+          tap(_ => this.log(`fetched hero id=${id}`)),
+          catchError(this.handleError<Hero>(`getHero id=${id}`))
+      );
+    }
+
+    /**
+ * Handle Http operation that failed.
+ * Let the app continue.
+ * @param operation - name of the operation that failed
+ * @param result - optional value to return as the observable result
+ */
+private handleError<T> (operation = 'operation', result?: T) {
+  return (error: any): Observable<T> => {
+
+    // TODO: send the error to remote logging infrastructure
+    console.error(error); // log to console instead
+
+    // TODO: better job of transforming error for user consumption
+    this.log(`${operation} failed: ${error.message}`);
+
+    // Let the app keep running by returning an empty result.
+    return of(result as T);
+  };
+}
+
 }
