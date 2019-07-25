@@ -12,8 +12,7 @@ export class HeroesComponent implements OnInit {
 
   // heroes = HEROES;
   heroes: Hero[]; // 把 heroes 属性的定义改为一句简单的声明。
-  selectedHero: Hero;   // 一个属性，不要赋初值
-
+  
   constructor(
     /* 
       往构造函数中添加一个私有的 heroService，其类型为 HeroService。
@@ -30,12 +29,18 @@ export class HeroesComponent implements OnInit {
       // subscribe 函数把这个英雄数组传给这个回调函数，该函数把英雄数组赋值给组件的 heroes 属性。
   }
 
-  onSelect(hero: Hero): void { // 按钮click事件
-    this.selectedHero = hero; // 同步操作
-  }
+
   
   ngOnInit() { // life cycle hook, （生命周期钩子）初始化逻辑
     this.getHeroes();
   }
 
 }
+
+
+/*垃圾堆
+
+selectedHero: Hero;   // 一个属性，不要赋初值
+  onSelect(hero: Hero): void { // 按钮click事件
+    this.selectedHero = hero; // 同步操作
+  }*/

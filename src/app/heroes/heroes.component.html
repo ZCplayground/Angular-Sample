@@ -1,13 +1,20 @@
-<h2>My Heroes</h2>
+<h2>My Heroes Component </h2>
 <ul class="heroes">
   <!--圆括号：事件绑定，监听事件click，当click时执行表达式 onSelect(hero)
       参数就是 *ngFor 里面遍历的每一个 hero-->
   <li *ngFor="let hero of heroes" 
-      [class.selected]="hero === selectedHero"
+      [class.selected]="hero === selectedHero" 
       (click)="onSelect(hero)"> 
-    <span class="badge">{{hero.id}}</span> {{hero.name}}
+      <a routerLink="/detail/{{hero.id}}">
+        <span class="badge">{{hero.id}}</span> {{hero.name}}
+      </a>
   </li>
 </ul>
+
+<!--
+[class.selected]="hero === selectedHero" 
+这个语法见 heroes.component.css
+-->
 
 <!--
     [hero]="selectedHero" 是 Angular 的属性绑定语法。
@@ -19,4 +26,6 @@
     当 selectedHero 改变时，属性绑定会修改 HeroDetailComponent 的 hero 属性，
     HeroDetailComponent 就会显示这个新的英雄。
 -->
+<!--
 <app-hero-detail [hero]="selectedHero"></app-hero-detail>
+-->

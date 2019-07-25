@@ -23,10 +23,16 @@ import { RouterModule, Routes } from '@angular/router';
 所以，首先要导入 HeroesComponent，以便能在 Route 中引用它。然后定义一个路由数组，其中的某个路由是指向这个组件的。
 */
 import { HeroesComponent }      from './heroes/heroes.component'; 
+import { DashboardComponent }   from './dashboard/dashboard.component'; // 导入组件
+import { HeroDetailComponent }  from './hero-detail/hero-detail.component';
 
 // 路由数组
 const routes: Routes = [
-  { path: 'heroes', component: HeroesComponent }
+  { path: 'heroes', component: HeroesComponent },
+  { path: 'dashboard', component: DashboardComponent }, // 添加路由
+  { path: '', redirectTo: '/dashboard', pathMatch: 'full' }, // 默认路由，把一个与空路径“完全匹配”的 URL 重定向到路径为 '/dashboard' 的路由。
+
+  { path: 'detail/:id', component: HeroDetailComponent }, // 参数化路由，指向id相匹配的hero detail
 ];
 
 @NgModule({

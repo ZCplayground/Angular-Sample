@@ -1,5 +1,5 @@
 <div *ngIf="hero"> <!--使用 *ngIf 隐藏空白的详情，再用一个div括起来-->
-    <h2>{{hero.name}} Details</h2>
+    <h2>{{hero.name}} Details Component</h2>
     <div><span>id: </span>{{hero.id}}</div>
     <div>
         <label>name:
@@ -13,3 +13,5 @@
         </label>
     </div>
 </div>
+
+<button (click)="goBack()">go back</button>
