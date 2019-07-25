@@ -94,7 +94,55 @@ private handleError<T> (operation = 'operation', result?: T) {
 
     // Let the app keep running by returning an empty result.
     return of(result as T);
+    };
+  }
+  httpOptions = {
+    headers: new HttpHeaders({ 'Content-Type': 'application/json' })
   };
-}
 
+  /** PUT: update the hero on the server */
+  updateHero (hero: Hero): Observable<any> {
+    return this.http.put(this.heroesUrl, hero, this.httpOptions)
+    /*HttpClient.put() 方法接受三个参数
+      URL 地址
+      要修改的数据（这里就是修改后的英雄）
+      选项*/
+    .pipe(
+      tap(_ => this.log(`updated hero id=${hero.id}`)),
+      catchError(this.handleError<any>('updateHero'))
+    );
+  }
+
+  /** POST: add a new hero to the server */
+  addHero (hero: Hero): Observable<Hero> {
+    return this.http.post<Hero>(this.heroesUrl, hero, this.httpOptions) // 它调用 HttpClient.post() 而不是 put()。
+
+    // 它期待服务器为这个新的英雄生成一个 id，然后把它通过 Observable<Hero> 返回给调用者
+    .pipe(
+      tap((newHero: Hero) => this.log(`added hero w/ id=${newHero.id}`)),
+      catchError(this.handleError<Hero>('addHero'))
+    );
+  }
+
+  /** DELETE: delete the hero from the server */
+  deleteHero (hero: Hero | number): Observable<Hero> {
+    const id = typeof hero === 'number' ? hero : hero.id;
+    const url = `${this.heroesUrl}/${id}`; // URL 就是英雄的资源 URL 加上要删除的英雄的 id。
+
+    return this.http.delete<Hero>(url, this.httpOptions).pipe(
+      tap(_ => this.log(`deleted hero id=${id}`)),
+      catchError(this.handleError<Hero>('deleteHero'))
+    );
+  }
+ /* GET heroes whose name contains search term */
+  searchHeroes(term: string): Observable<Hero[]> {
+    if (!term.trim()) {
+      // if not search term, return empty hero array.
+      return of([]);
+    }
+    return this.http.get<Hero[]>(`${this.heroesUrl}/?name=${term}`).pipe(
+      tap(_ => this.log(`found heroes matching "${term}"`)),
+      catchError(this.handleError<Hero[]>('searchHeroes', []))
+    );
+  }
 }

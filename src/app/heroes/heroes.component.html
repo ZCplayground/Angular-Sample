@@ -1,4 +1,13 @@
 <h2>My Heroes Component </h2>
+<div>
+  <label>Hero name:
+    <input #heroName />
+  </label>
+  <!-- (click) passes input value to add() and then clears the input -->
+  <button (click)="add(heroName.value); heroName.value=''">
+    add
+  </button>
+</div>
 <ul class="heroes">
   <!--圆括号：事件绑定，监听事件click，当click时执行表达式 onSelect(hero)
       参数就是 *ngFor 里面遍历的每一个 hero-->
@@ -7,7 +16,9 @@
       (click)="onSelect(hero)"> 
       <a routerLink="/detail/{{hero.id}}">
         <span class="badge">{{hero.id}}</span> {{hero.name}}
-      </a>
+      </a> 
+        <button class="delete" title="delete hero"
+        (click)="delete(hero)">x</button>
   </li>
 </ul>
 
