@@ -4,7 +4,7 @@ import { Hero } from '../hero';
 import { HeroService } from '../hero.service';
 
 @Component({ // component装饰器函数，为该组件指定元数据
-  selector: 'app-heroes', // 组件选择器
+  selector: 'app-heroes', // 组件选择器，表示HTML中匹配哪一个标签
   templateUrl: './heroes.component.html', // 组件模板文件位置
   styleUrls: ['./heroes.component.css'] // 私有CCS样式表位置
 })

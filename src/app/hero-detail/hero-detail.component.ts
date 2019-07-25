@@ -10,7 +10,7 @@ HeroDetailComponent 需要从一种新的途径获取要显示的英雄。
 - 从这个路由中提取出 id
 - 通过 HeroService 从服务器上获取具有这个 id 的英雄数据。 */
 
-import { ActivatedRoute } from '@angular/router'; //保存路由信息，如id
+import { ActivatedRoute } from '@angular/router'; // 为了使用路由参数导入的。 保存路由信息，如id
 import { Location } from '@angular/common'; //一个 Angular 的服务，用来与浏览器打交道。 稍后，你就会使用它来导航回上一个视图。
 
 import { HeroService }  from '../hero.service'; // 服务，从远端获取hero信息
@@ -25,9 +25,9 @@ export class HeroDetailComponent implements OnInit {
   /* 输入属性是一个带有 @Input 装饰器的可设置属性。
      当它通过*属性绑定*的形式（也就是中括号）被绑定时，值会“流入”这个属性。
      
-     这里的hero属性就必须是一个输入属性。因为 *外部的* 组件要绑定他
+     这里的hero属性就必须是一个输入属性。因为 *外部的* 组件要绑定他。这个组件所做的只是通过 hero 属性接收一个英雄对象，并显示它。
      
-     这个组件所做的只是通过 hero 属性接收一个英雄对象，并显示它。*/
+     书本：当我们为组件指定了输入时，这个组件的类内就一定要有一个实例属性来接受这个输入。方式是 @Input 装饰器*/
 
   constructor(
     private route: ActivatedRoute,
