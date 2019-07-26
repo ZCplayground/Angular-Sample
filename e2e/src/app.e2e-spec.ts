@@ -1,7 +1,7 @@
 import { AppPage } from './app.po';
 import { browser, logging, element, by} from 'protractor';
 
-describe('workspace-project App', () => {
+/*xdescribe('workspace-project App', () => {
   let page: AppPage;
 
   beforeEach(() => {
@@ -20,7 +20,7 @@ describe('workspace-project App', () => {
       level: logging.Level.SEVERE,
     } as logging.Entry));
   });
-});
+});*/
 
 describe('Protractor Demo Test', function(){
   var firstNumber = element(by.model('first'));
