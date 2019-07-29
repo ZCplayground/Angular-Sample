@@ -1,4 +1,3 @@
-import { AppPage } from './app.po';
 import { browser, element, by, ElementFinder, ElementArrayFinder } from 'protractor';
 import { promise } from 'selenium-webdriver';
 
@@ -35,27 +34,6 @@ class Hero {
     };
   }
 }
-
-/*xdescribe('workspace-project App', () => {
-  let page: AppPage;
-
-  beforeEach(() => {
-    page = new AppPage();
-  });
-
-  it('should display welcome message', () => {
-    page.navigateTo();
-    expect(page.getTitleText()).toEqual('Tour of Heroes');
-  });
-
-  afterEach(async () => {
-    // Assert that there are no errors emitted from the browser
-    const logs = await browser.manage().logs().get(logging.Type.BROWSER);
-    expect(logs).not.toContain(jasmine.objectContaining({
-      level: logging.Level.SEVERE,
-    } as logging.Entry));
-  });
-});*/
 
 describe('Protractor Demo Test', function(){
   var firstNumber = element(by.model('first'));
@@ -139,11 +117,11 @@ describe('Tutorial part 6', () => {
     return {
       navElts: navElts,
 
-      appDashboardHref: navElts.get(0),
+      appDashboardHref: navElts.get(0), // dashboard 按钮
       appDashboard: element(by.css('app-root app-dashboard')),
       topHeroes: element.all(by.css('app-root app-dashboard > div h4')), // Narco, Bombasto, Celeritas, Magneta
 
-      appHeroesHref: navElts.get(1),
+      appHeroesHref: navElts.get(1), // Heroes 按钮
       appHeroes: element(by.css('app-root app-heroes')),
       allHeroes: element.all(by.css('app-root app-heroes li')),
       selectedHeroSubview: element(by.css('app-root app-heroes > div:last-child')),
@@ -159,6 +137,10 @@ describe('Tutorial part 6', () => {
 
     it(`has title '${expectedTitle}'`, () => {
       expect(browser.getTitle()).toEqual(expectedTitle);
+    });
+
+    it(`has h1 '${expectedH1}'`, () => {
+      expectHeading(1, expectedH1);
     });
 
     const expectedViewNames = ['Dashboard', 'Heroes'];
@@ -214,17 +196,17 @@ describe('Tutorial part 6', () => {
   describe('Heroes tests', () => {
 
     beforeAll(() => browser.get(''));
-    browser.sleep(1000);
+    browser.sleep(1000); // 1000ms = 1s
 
     it('can switch to Heroes view', () => {
-      getPageElts().appHeroesHref.click();
+      getPageElts().appHeroesHref.click(); // 按下 heroes 按钮
       let page = getPageElts();
-      expect(page.appHeroes.isPresent()).toBeTruthy();
-      expect(page.allHeroes.count()).toEqual(10, 'number of heroes');
+      expect(page.appHeroes.isPresent()).toBeTruthy(); // hero componet 有 present on the page
+      expect(page.allHeroes.count()).toEqual(10, 'number of heroes'); // 共有10个英雄
     });
 
     it('can route to hero details', async () => {
-      getHeroLiEltById(targetHero.id).click();
+      getHeroLiEltById(targetHero.id).click(); // 按下heroes 列表里的第15号英雄（到detail 页）
 
       let page = getPageElts();
       expect(page.heroDetail.isPresent()).toBeTruthy('shows hero detail');
@@ -315,19 +297,13 @@ describe('Tutorial part 6', () => {
   async function updateHeroNameInDetailView() { // 更新一个英雄的信息，是否更新成功
     // Assumes that the current view is the hero details view.
     // 在describe中按顺序执行，所以此时的视图应该是detial那一页
-    addToHeroName(nameSuffix);
+    addToHeroName(nameSuffix); // 在名字后面多输入一个字母X
 
     let page = getPageElts();
     let hero = await Hero.fromDetail(page.heroDetail);
     expect(hero.id).toEqual(targetHero.id);
     expect(hero.name).toEqual(newHeroName);
   }
-
-  function addToHeroName(text: string): promise.Promise<void> {
-    let input = element(by.css('input'));
-    return input.sendKeys(text);
-  }
-
 });
 
 
@@ -348,7 +324,7 @@ function getHeroAEltById(id: number): ElementFinder {
   return spanForId.element(by.xpath('..'));
 }
 
-function getHeroLiEltById(id: number): ElementFinder {
+function getHeroLiEltById(id: number): ElementFinder { // 通过 id 获得对应英雄的 li elementfinder
   let spanForId = element(by.cssContainingText('li span.badge', id.toString()));
   return spanForId.element(by.xpath('../..'));
 }

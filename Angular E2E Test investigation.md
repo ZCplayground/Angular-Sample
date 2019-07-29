@@ -1,4 +1,4 @@
-# 介绍
+# Angular 测试介绍
 
 测试有两种：端到端测试和单元测试
 
@@ -17,17 +17,19 @@ Protractor 是一款 Angular e2e test framework。能够打开一个浏览器与
 
 Jasmine 是行为驱动的一款测试 JavaScript 代码的测试框架。定义了一系列的语法，Protractor 就用到了这些语法。见[这里](https://jasmine.github.io/tutorials/your_first_suite)
 
-# 功能 & 语法
+# Jasmine
 
-## Jasmine
+Jasmine 是一个 BDD framework，其中蕴含的概念是 BDD 思想的那一套术语。
 
-### Suite、Specs。（Expectation、Mathcer）
+## Suite、Specs
 
-Jasmine 是一个 BDD framework，所以有 BDD 思想的那一套术语。下文整理自 [your_first_suite](https://jasmine.github.io/tutorials/your_first_suite)
+下文整理自 [your_first_suite](https://jasmine.github.io/tutorials/your_first_suite)
 
 **测试套件（Suite）**指的是，一组针对软件规格的**某个方面的测试**用例。可以看作，对软件的某个方面的描述（describe）。测试套件由一个`describe`函数构成，它接受两个参数：第一个参数是字符串，表示测试套件的名字或用来描述将要测试什么；第二个参数是个函数，用来实现这个测试套件。
 
 **测试规格（Specs）**指的是，针对软件一个功能点的测试，是软件测试的最基本单位。**一组相关的测试用例，构成一个测试套件**。测试用例由一个`it`函数构成，它的参数与`describe`函数是一样的，接受两个参数：第一个参数是描述用字符串；第二个参数是函数，用来实现这个测试用例。
+
+## Expectation、Mathcer
 
 用于检验一个测试结果与预先设定的预期值是否相符，叫做 **expectations**，一个 Specs 里面可以有多个 expectations。Expectations 是由**断言（assert）**来实现的，对应的函数是`expect`和一系列 **Matcher function**。断言的结果是 true or false，只有当一个 Specs 里面所有的 expectations 都为 true 这个 specs 才算测试通过。
 
@@ -43,13 +45,13 @@ describe("A suite", function() {
 
 **Matchers**，每一个 matcher 函数实质上都是实现了一种在 actual value 和 expected value 之间的布尔比较。[matcher API docs](https://jasmine.github.io/api/edge/matchers.html)，也可以自己实现自己的 matcher。
 
-### beforeEach, afterEach, beforeAll, and afterAll 
+## beforeEach, afterEach, beforeAll, and afterAll 
 
 这几个 API 是为了让在测试 开始前 / 结束后 能够执行 setup or teardown 代码。
 
 > `beforeEach` function is called once **before each spec** in the describe in which it is called. `afterEach` function is called once **after each spec**. The `beforeAll` function is **called only once before all the specs** in describe are run, and the `afterAll` function is **called after all specs finish**
 
-### 共享变量：this & Function scope
+## 共享变量：this & Function scope
 
 `this` 关键字可以在多个 `beforeEach/it/afterEach` 函数之间共享一个变量。每一个单独的 `spec` 的 `beforeEach/it/afterEach` 有一个单独的 `this` 作为共享对象。执行到下一个 `spec` 时 `this` 会重置为 empty
 
@@ -85,11 +87,11 @@ describe("A suite is just a function", function() {
 });
 ~~~
 
-### fail & disable
+## fail & disable
 
 可以手动使一个 spec 必定失败或者不执行。函数是`fail`。必定不执行就是把 `describe` 改成 `xdescreibe`。有点像是注释掉的意思。会让 spec 进入 pending 状态。
 
-### Spy
+## Spy
 
 http://keenwon.com/1218.html
 
@@ -97,34 +99,32 @@ http://keenwon.com/1218.html
 
 > spy可以保存任何函数的调用记录和输入的参数，spy只能存在于describe和it中，在spec执行完之后销毁。先说两个针对spies的Matcher，toHaveBeenCalled 用来测试函数是否被调用过；toHaveBeenCalledWith 用来测试函数被调用时的参数列表，匹配的话返回true
 
-### 类型判断/ not null or not undefined / objectContaining: 键值对是否存在 / 数组内是否存在某值 / 字符串部分匹配 / 计时与日期
+## 类型判断/ not null or not undefined / objectContaining: 键值对是否存在 / 数组内是否存在某值 / 字符串部分匹配 / 计时与日期
 
 见 tutorial，都有例子。
 
-### 异步
+## 异步
 
 1. 回调 callback
 2. 承诺 promise
 3. async/await
 
-解释一下 
+解释：https://segmentfault.com/a/1190000007535316
 
-https://segmentfault.com/a/1190000007535316
-
-## Protractor
+# Protractor 语法
 
 overview：http://www.protractortest.org/#/api-overview
 文档：http://www.protractortest.org/#/api
 
-### Global Variables
+## Global Variables
 
 Protractor 可以向你的 spec test file 提供的全局变量：
 
 - `browser` 实质上是 WebDriver 的封装实例，用于导航到对应的网页。`browser.get` 方法加载一个页面。
 - `element` 用于在你 test 的 page 上寻找定位 DOM element。需要一个叫做 `Locator` 的参数。见：[Using Locators](http://www.protractortest.org/#/locators)，或者[例子](https://github.com/angular/protractor/blob/5.4.1/spec/basic/elements_spec.js)
-- `by` 是 **locator**，用于在 Angular 应用中查找元素。
+- `by` 就是 **locator**，用于在 Angular 应用中查找元素。
 
-### Locators
+## Locators
 
 ~~~javascript
 // Find an element using a css selector.
@@ -164,7 +164,7 @@ tagName | 用标签名来定位 | `expect(element(by.tagName('a')).getText()).to
 xpath | 用 xpath 来定位 | `var li = element(by.xpath('//ul/li/a'));`
 
 
-### elements
+## elements
 
 获取了元素之后可以用 element 进行各种操作。
 
@@ -201,7 +201,7 @@ clear | 清空一个 element 的 value 的属性值
 isDisplayed | 检测是否 currently displayed，例如 `<div id="foo" style="visibility:hidden">` 就是false
 takeScreenshot| 
 
-### css selector 知识
+## css selector 知识
 
 https://www.w3school.com.cn/cssref/css_selectors.asp
 
