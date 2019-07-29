@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { Title }     from '@angular/platform-browser';
 
 @Component({
   selector: 'app-root',
@@ -7,6 +8,16 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'Tour of Heroes';
+
+  public constructor(private titleService: Title ) { }
+
+  public setTitle( newTitle: string) {
+    this.titleService.setTitle( newTitle );
+  }
+
+  ngOnInit() { // life cycle hook, （生命周期钩子）初始化逻辑
+    this.setTitle('Tour of Heroes');
+  }
 }
 
 /*

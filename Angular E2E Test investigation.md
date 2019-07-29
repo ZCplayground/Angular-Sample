@@ -21,7 +21,7 @@ Jasmine 是行为驱动的一款测试 JavaScript 代码的测试框架。定义
 
 ## Jasmine
 
-### Suite、Specs、Expectation、Mathcer
+### Suite、Specs。（Expectation、Mathcer）
 
 Jasmine 是一个 BDD framework，所以有 BDD 思想的那一套术语。下文整理自 [your_first_suite](https://jasmine.github.io/tutorials/your_first_suite)
 
@@ -107,6 +107,10 @@ http://keenwon.com/1218.html
 2. 承诺 promise
 3. async/await
 
+解释一下 
+
+https://segmentfault.com/a/1190000007535316
+
 ## Protractor
 
 overview：http://www.protractortest.org/#/api-overview
@@ -118,7 +122,7 @@ Protractor 可以向你的 spec test file 提供的全局变量：
 
 - `browser` 实质上是 WebDriver 的封装实例，用于导航到对应的网页。`browser.get` 方法加载一个页面。
 - `element` 用于在你 test 的 page 上寻找定位 DOM element。需要一个叫做 `Locator` 的参数。见：[Using Locators](http://www.protractortest.org/#/locators)，或者[例子](https://github.com/angular/protractor/blob/5.4.1/spec/basic/elements_spec.js)
-- `by` 是 locator strtegies 的集合，用于查找元素。For example, elements can be found by CSS selector, by ID, or by the attribute they are bound to with ng-model.
+- `by` 是 **locator**，用于在 Angular 应用中查找元素。
 
 ### Locators
 
@@ -141,5 +145,71 @@ by.model('name')
 by.binding('bindingname')
 ~~~
 
-API | 解释
----|---
+Locators API | 解释 | 例子
+---|---|---
+model | by.model() 可以定位有 ng-model 属性的元素，可以定位输入框 | `by.model('first')` -> the element with `ng-model="first"`
+id    | by.id() 定位任何 id，id 是一个 HTML 全局属性，规定元素的唯一 id |`by.id('gobutton')` -> the element with the given **id**. This finds `<button id="gobutton">`.
+buttonText | 专门用 button 元素的字面值来定位 | `element(by.buttonText('Save'));` -> `<button>Save</button>`
+partialButtonText  | button 字面值的部分匹配 | `element(by.partialButtonText('Save'))` -> `<button>Save my file</button>`
+binding | angular 有个概念是绑定，可以将属性值与 HTML 元素的值进行绑定。元素中有属性 `class="ng-binding"`的，都有一个变量与其绑定。可以通过变量名来定位这个元素 | `by.binding('latest')` -> the element **bound to the variable** `latest`. This finds the span containing {{latest}}
+repeater | Find elements inside an `ng-repeat`. | 是 AngularJS 产物
+className | 根据特殊的类名寻找元素 | `element(by.className('dog'));` -> `<li class="dog">Dog</li>` 
+css | 使用 CSS selector 来定位元素 |  CSS 选择器参考手册：https://www.w3school.com.cn/cssref/css_selectors.asp
+cssContainingText  | 使用 CSS selector 和一个部分匹配字符串来定位元素 | 略
+linkText | 用 visible text 定位 link element | `expect(element(by.linkText('Google')).getTagName()).toBe('a');` -> `<a href="http://www.google.com">Google</a>`
+partialLinkText | 上一个函数的部分匹配版本 | `element(by.partialLinkText('Doge'));` -> `<a href="https://en.wikipedia.org/wiki/Doge_(meme)">Doge meme</a>`
+js | 参数是一段 JavaScript，用这段 JS 来定位 |
+name | 用 `name` 属性来定位 | `var dog = element(by.name('dog_name'));` -> `<li name="dog_name">Dog</li>`
+tagName | 用标签名来定位 | `expect(element(by.tagName('a')).getText()).toBe('Google');` -> `<a href="http://www.google.com">Google</a>`
+xpath | 用 xpath 来定位 | `var li = element(by.xpath('//ul/li/a'));`
+
+
+### elements
+
+获取了元素之后可以用 element 进行各种操作。
+
+element.all() API | 解释 | 例子
+---|---|---
+element.all(locator) | 得到所有符合搜索条件的元素的数组 ElementArrayFinder。 all 是可以嵌套的。下列的函数的调用者的类型应该是 ElementArrayFinder
+filter | 顾名思义
+get | 用下标从 ElementArrayFinder 中得到一个元素。返回的元素的类是 ElementFinder
+first | 
+last | 
+count | 
+isPresent | Returns true if there are any elements match the finder.
+$$(cssSelector) | 语法糖 | `element.all(by.css('.abc'))` is equivalent to `$$('.abc')`
+then | 取出 ElementArrayFinder 中的元素列表，传入一个函数，执行这个函数
+each | 对 ElementArrayFinder 中的每一个 ElementFinder 执行一个函数
+map | 函数式编程
+reduce | 函数式编程
+element.(locator) | 得到符合搜索条件的代表单一元素的 ElementFinder。locator也是可以嵌套的。下列函数的调用者的类型是 ElementFinder。
+isPresent | Determine whether the element is present on the page.
+getWebElement | Returns the WebElement represented by this ElementFinder.
+getId | Gets the WebDriver ID string representation for this web element.
+click | 对这个元素模拟点击（如button）
+sendKeys | 模拟输入，如对 input 的输入 
+getTagName | 获得这个 element 的 tag 名字 |
+getCssValue | 获取 CSS 中某个 property 的对应的值。例如可以检测颜色对不对 | `expect(element(by.binding('person.name')).getCssValue('color')).toBe('#000000');`
+getAttribute | 获得某个属性，参数是一个查询字符串 |
+getText | 获得字面值
+getSize | compute the size of this element's bounding box
+getLocation | compute the location of this element in page space
+isEnabled | 查看 element 有没有被 disabled 属性
+isSelected | 查看当前 element 有没有被选中
+submit | 模拟表单的提交
+clear | 清空一个 element 的 value 的属性值
+isDisplayed | 检测是否 currently displayed，例如 `<div id="foo" style="visibility:hidden">` 就是false
+takeScreenshot| 
+
+### css selector 知识
+
+https://www.w3school.com.cn/cssref/css_selectors.asp
+
+selector 语法 | 例子 | 例子描述
+---|---|---
+.class |	.intro	|选择 class="intro" 的所有元素。
+#id	| #firstname	|选择 id="firstname" 的所有元素。
+element	| p |	选择所有 `<p>` 元素。
+element,element|	div,p |	选择所有 `<div>` 元素和所有 `<p>` 元素。逗号就是集合并集
+element element|	div p	| 选择 `<div>` 元素内部的所有 `<p>` 元素。空格是内部关系
+element>element|	div>p	| 选择父元素为`<div>` 元素的所有`<p>` 元素。大于号是严格的父子关系
